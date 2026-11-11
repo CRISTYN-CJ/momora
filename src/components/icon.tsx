@@ -6,6 +6,9 @@ const paths = {
   arrowRight: 'M4 12h16m-6-6l6 6-6 6',
   check: 'M5 12.5l4.5 4.5L19 7.5',
   search: 'M20 20l-4.2-4.2',
+  user: 'M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6',
+  plus: 'M12 5v14M5 12h14',
+  close: 'M6 6l12 12M18 6L6 18',
 } as const;
 
 export type IconName = keyof typeof paths | 'globe';
@@ -24,6 +27,7 @@ export function Icon({ name, size = 20, color = '#0B0B0B', strokeWidth = 2 }: Pr
       ) : (
         <>
           {name === 'search' && <Circle cx={10.5} cy={10.5} r={6.5} {...stroke} />}
+          {name === 'user' && <Circle cx={12} cy={8} r={3.5} {...stroke} />}
           <Path d={paths[name]} {...stroke} />
         </>
       )}
