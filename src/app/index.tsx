@@ -3,9 +3,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Redirect, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Alert, Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useSession } from '@/auth/session';
 import { Icon } from '@/components/icon';
 import { useProfile } from '@/onboarding/profile';
 import { fonts, stageThemes, type Stage } from '@/theme';
@@ -26,6 +27,7 @@ const FADE_MS = 700;
 /** Welcome screen. The three stage variants cross-fade on a loop. */
 export default function Welcome() {
   const { onboarded } = useProfile();
+  const { session } = useSession();
   const insets = useSafeAreaInsets();
   const [active, setActive] = useState(0);
   const [opacities] = useState(() => SLIDES.map((_, i) => new Animated.Value(i === 0 ? 1 : 0)));
@@ -41,7 +43,8 @@ export default function Welcome() {
     );
   }, [active, opacities]);
 
-  if (onboarded) return <Redirect href="/home" />;
+  // Finished onboarding but no account yet: finish by creating one.
+  if (onboarded) return <Redirect href={session ? '/home' : '/sign-up'} />;
 
   return (
     <View style={styles.screen}>
@@ -80,7 +83,7 @@ export default function Welcome() {
         <Pressable
           accessibilityRole="button"
           hitSlop={12}
-          onPress={() => Alert.alert('Sign in is coming soon', 'Accounts are the next thing being built.')}>
+          onPress={() => router.push('/sign-in')}>
           <Text style={styles.signIn}>I already have an account</Text>
         </Pressable>
 

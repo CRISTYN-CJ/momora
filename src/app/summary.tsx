@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useSession } from '@/auth/session';
 import { BackButton, PillButton } from '@/components/buttons';
 import { daysBetween, formatLong, formatShort, fromISO, todayISO } from '@/onboarding/dates';
 import { labelFor } from '@/onboarding/flow';
@@ -16,11 +17,12 @@ import { colors, fonts, themeFor, type, type StageTheme } from '@/theme';
 /** "Alright, I've got it." — Momo plays back what it learned. */
 export default function Summary() {
   const { answers, completeOnboarding } = useProfile();
+  const { session } = useSession();
   const theme = themeFor(String(answers.stage ?? ''));
 
   const finish = () => {
     completeOnboarding();
-    router.replace('/home');
+    router.replace(session ? '/home' : '/sign-up');
   };
 
   return (

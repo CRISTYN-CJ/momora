@@ -5,9 +5,11 @@ import type { Answers, AnswerValue } from './types';
 
 const STORAGE_KEY = 'momora.profile.v1';
 
-type Profile = {
+export type Profile = {
   answers: Answers;
   onboarded: boolean;
+  /** When onboarding was finished, as an ISO timestamp. */
+  onboardedAt?: string;
 };
 
 type ProfileContextValue = Profile & {
@@ -15,6 +17,8 @@ type ProfileContextValue = Profile & {
   ready: boolean;
   setAnswer: (id: string, value: AnswerValue | undefined) => void;
   completeOnboarding: () => void;
+  /** Replace everything, e.g. with the profile saved in the user's account. */
+  load: (profile: Profile) => void;
   reset: () => void;
 };
 
@@ -23,8 +27,8 @@ const empty: Profile = { answers: {}, onboarded: false };
 const ProfileContext = createContext<ProfileContextValue | null>(null);
 
 /**
- * Holds what the user told Momo. Stored on the device for now; this moves
- * to the user's account once sign-up exists.
+ * Holds what the user told Momo. Kept on the device so the app opens
+ * instantly; `ProfileSync` mirrors it to the user's account once signed in.
  */
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile>(empty);
@@ -46,12 +50,16 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   const setAnswer = useCallback((id: string, value: AnswerValue | undefined) => {
     setProfile((p) => ({ ...p, answers: { ...p.answers, [id]: value } }));
   }, []);
-  const completeOnboarding = useCallback(() => setProfile((p) => ({ ...p, onboarded: true })), []);
+  const completeOnboarding = useCallback(
+    () => setProfile((p) => ({ ...p, onboarded: true, onboardedAt: p.onboardedAt ?? new Date().toISOString() })),
+    [],
+  );
+  const load = useCallback((next: Profile) => setProfile(next), []);
   const reset = useCallback(() => setProfile(empty), []);
 
   const value = useMemo(
-    () => ({ ...profile, ready, setAnswer, completeOnboarding, reset }),
-    [profile, ready, setAnswer, completeOnboarding, reset],
+    () => ({ ...profile, ready, setAnswer, completeOnboarding, load, reset }),
+    [profile, ready, setAnswer, completeOnboarding, load, reset],
   );
 
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;

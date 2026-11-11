@@ -5,6 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { ProfileSync } from '@/auth/profile-sync';
+import { SessionProvider, useSession } from '@/auth/session';
 import { ProfileProvider, useProfile } from '@/onboarding/profile';
 import { colors } from '@/theme';
 
@@ -13,17 +15,21 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <ProfileProvider>
-        <Screens />
-      </ProfileProvider>
+      <SessionProvider>
+        <ProfileProvider>
+          <ProfileSync />
+          <Screens />
+        </ProfileProvider>
+      </SessionProvider>
     </SafeAreaProvider>
   );
 }
 
 function Screens() {
   const [fontsLoaded, fontError] = useFonts({ Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold });
-  const { ready } = useProfile();
-  const loaded = (fontsLoaded || fontError) && ready;
+  const profile = useProfile();
+  const session = useSession();
+  const loaded = (fontsLoaded || fontError) && profile.ready && session.ready;
 
   useEffect(() => {
     if (loaded) SplashScreen.hideAsync();

@@ -28,9 +28,12 @@ npx expo lint
 
 - Welcome screen, Meet Momo, and the chat-style onboarding for all three stages
 - A summary screen per stage that plays back what Momo learned
-- Answers saved on the device
+- Accounts: Sign in with Apple and email with password, including email-code confirmation and password reset
+- Answers saved on the device and synced to the user's Supabase profile
 
-Not built yet: accounts, subscription, the home screens, trackers, and the Momo AI chat. `src/app/home.tsx` is a placeholder.
+Not built yet: subscription, the home screens, trackers, the Momo AI chat, and in-app account deletion. `src/app/home.tsx` is a placeholder.
+
+Sign in with Apple does not work in Expo Go; it needs a development or TestFlight build.
 
 ## Where things live
 
@@ -39,6 +42,8 @@ Not built yet: accounts, subscription, the home screens, trackers, and the Momo 
 | `src/app/` | Screens (Expo Router: one file per screen) |
 | `src/onboarding/flow.ts` | Every onboarding question, in order. Edit here to add, remove or reword questions |
 | `src/onboarding/insights.ts` | Fertile window, pregnancy week and baby age calculations |
+| `src/auth/` | Session, Apple sign-in, and syncing the profile to the account |
+| `supabase/migrations/` | Database schema, in order |
 | `src/components/` | Chat bubbles, chips, calendar, dial, number wheel, country picker |
 | `src/theme/` | Colours per stage, fonts, spacing |
 
