@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useSession } from '@/auth/session';
+import { PillButton } from '@/components/buttons';
 import { MoodCheckIn } from '@/components/cards';
 import { Icon } from '@/components/icon';
 import { useTodayCheckIn } from '@/data/check-ins';
@@ -52,6 +53,8 @@ export default function Home() {
         {answers.stage === 'ttc' && <TtcHome theme={theme} />}
         {answers.stage === 'pregnancy' && <PregnancyHome theme={theme} />}
         {answers.stage === 'postdelivery' && <PostDeliveryHome theme={theme} />}
+
+        <PillButton wide label="Ask Momo anything" color={theme.accent} onPress={() => router.push('/momo')} />
 
         <MoodCheckIn mood={checkIn.mood} onPick={checkIn.save} error={checkIn.error} theme={theme} />
       </ScrollView>

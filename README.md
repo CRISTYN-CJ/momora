@@ -34,7 +34,9 @@ npx expo lint
 - A home screen per stage: cycle and fertile window, pregnancy week and appointments, baby age and a feed/sleep/diaper log
 - A daily mood check-in and an account screen with sign-out
 
-Not built yet: subscription, the Momo AI chat, editing answers after onboarding, and in-app account deletion.
+- Momo AI chat: a Supabase Edge Function (`supabase/functions/momo-chat`) calls Claude with the user's profile and recent logs as context. It needs an `ANTHROPIC_API_KEY` secret set on the Supabase project
+
+Not built yet: subscription, editing answers after onboarding, and in-app account deletion.
 
 Sign in with Apple does not work in Expo Go; it needs a development or TestFlight build.
 
@@ -47,6 +49,7 @@ Sign in with Apple does not work in Expo Go; it needs a development or TestFligh
 | `src/onboarding/insights.ts` | Fertile window, pregnancy week and baby age calculations |
 | `src/auth/` | Session, Apple sign-in, and syncing the profile to the account |
 | `supabase/migrations/` | Database schema, in order |
+| `supabase/functions/momo-chat/` | Server code for the Momo chat; `prompt.ts` holds Momo's instructions and safety rules |
 | `src/home/` | The home screen content for each stage |
 | `src/data/` | Reading and writing check-ins and baby logs |
 | `src/components/` | Chat bubbles, chips, calendar, dial, number wheel, country picker |
