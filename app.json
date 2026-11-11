@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Momora",
+    "slug": "momora",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "momora",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.cjdigitalmedia.momora"
+    },
+    "web": {
+      "output": "single",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FFFFFF",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 120
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
